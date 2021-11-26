@@ -11,4 +11,6 @@ import com.autocluck.tweet_scheduler.model.Tweet;
 public interface TweetRepository extends MongoRepository<Tweet, String>{
 
 	Stream<Tweet> findAllBy();
+	
+	void deleteTweetByName(String name);
 }

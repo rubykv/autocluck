@@ -1,7 +1,5 @@
 package com.autocluck.tweet_scheduler.service;
 
-import java.math.BigInteger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +15,12 @@ public class TweetService {
 
 	public void saveTweet(CreateTweetRequest request) {
 		Tweet tweet = new Tweet();
-		tweet.setId(BigInteger.valueOf(request.getContent().hashCode()));
-		tweet.setTweet(request.getContent());
+		tweet.setName(request.getName());
+		tweet.setContent(request.getContent());
 		tweetRepository.save(tweet);
+	}
+	
+	public void deleteTweet(String name) {
+		tweetRepository.deleteTweetByName(name);
 	}
 }

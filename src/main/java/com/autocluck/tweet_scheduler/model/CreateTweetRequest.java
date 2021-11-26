@@ -6,6 +6,7 @@ public class CreateTweetRequest {
 	private String content;
 	private String link;
 	private List<String> hashTag;
+	private String name;
 
 	public String getContent() {
 		return content;
@@ -29,5 +30,13 @@ public class CreateTweetRequest {
 //set max 3
 	public void setHashTag(List<String> hashTag) {
 		this.hashTag = hashTag;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

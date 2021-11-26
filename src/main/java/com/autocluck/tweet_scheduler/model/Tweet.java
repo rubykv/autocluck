@@ -1,7 +1,5 @@
 package com.autocluck.tweet_scheduler.model;
 
-import java.math.BigInteger;
-
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,22 +8,32 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Tweet {
 
 	@Id
-	private BigInteger id;
-	private String tweet;
+	private String id;
+	private String content;
+	private String name;
 
-	public BigInteger getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(BigInteger id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getTweet() {
-		return tweet;
+	public String getContent() {
+		return content;
 	}
 
-	public void setTweet(String tweet) {
-		this.tweet = tweet;
+	public void setContent(String content) {
+		this.content = content;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }
