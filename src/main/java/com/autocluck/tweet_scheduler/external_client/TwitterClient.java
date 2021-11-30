@@ -3,10 +3,11 @@ package com.autocluck.tweet_scheduler.external_client;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.autocluck.tweet_scheduler.config.TweetSchedulerConfig;
+import com.autocluck.tweet_scheduler.model.Identity;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -15,24 +16,19 @@ import twitter4j.auth.AccessToken;
 
 @Component
 public class TwitterClient {
-
-	@Autowired
-	private TweetSchedulerConfig tweetSchedulerConfig;
-
-	public boolean doPost(String updateStatus) throws InterruptedException, ExecutionException, IOException {
+    Logger logger = LoggerFactory.getLogger(TwitterClient.class);
+	
+	public void doPost(String updateStatus,Identity identity) throws InterruptedException, ExecutionException, IOException, TwitterException {
 		try {
 			Twitter twitter = new TwitterFactory().getInstance();
-			twitter.setOAuthConsumer(tweetSchedulerConfig.getKey(), tweetSchedulerConfig.getSecret());
-			AccessToken accessToken = new AccessToken(tweetSchedulerConfig.getAccesstoken(),
-					tweetSchedulerConfig.getTokensecret());
+			twitter.setOAuthConsumer(identity.getKey(), identity.getSecret());
+			AccessToken accessToken = new AccessToken(identity.getAccesstoken(), identity.getTokensecret());
 			twitter.setOAuthAccessToken(accessToken);
 			twitter.updateStatus(updateStatus);
-			// TODO Implement logger
-			System.out.println("Successfully updated the status in Twitter.");
-			return true;
+			logger.info("Successfully updated the status in Twitter.");
 		} catch (TwitterException te) {
-			te.printStackTrace();//TODO print to logs
-			return false;
+			logger.error("Error occurred while updating tweet " + te);
+			throw te;
 		}
 	}
 }

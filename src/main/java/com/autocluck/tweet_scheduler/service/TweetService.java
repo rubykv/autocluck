@@ -1,5 +1,7 @@
 package com.autocluck.tweet_scheduler.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import com.autocluck.tweet_scheduler.repository.TweetRepository;
 
 @Service
 public class TweetService {
+    Logger logger = LoggerFactory.getLogger(TweetService.class);
 
 	@Autowired
 	private TweetRepository tweetRepository;
