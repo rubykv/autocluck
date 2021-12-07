@@ -1,29 +1,66 @@
 package com.autocluck.tweet_scheduler.service;
 
+import java.util.Objects;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import com.autocluck.tweet_scheduler.AutoCluckUtil;
 import com.autocluck.tweet_scheduler.model.CreateTweetRequest;
+import com.autocluck.tweet_scheduler.model.Cred;
 import com.autocluck.tweet_scheduler.model.Tweet;
+import com.autocluck.tweet_scheduler.repository.CredRepository;
 import com.autocluck.tweet_scheduler.repository.TweetRepository;
 
 @Service
 public class TweetService {
-    Logger logger = LoggerFactory.getLogger(TweetService.class);
+	Logger logger = LoggerFactory.getLogger(TweetService.class);
+
+	public static String key = null;
+	public static String authString = null;
 
 	@Autowired
 	private TweetRepository tweetRepository;
 
-	public void saveTweet(CreateTweetRequest request) {
-		Tweet tweet = new Tweet();
-		tweet.setName(request.getName());
-		tweet.setContent(request.getContent());
-		tweetRepository.save(tweet);
+	@Autowired
+	private CredRepository credRepository;
+
+	@PostConstruct
+	public void fetchKey() {
+		Cred cred = credRepository.findAll().get(0);
+		key = cred.getKey();
+		authString = cred.getAuthString();
 	}
-	
+
+	public void saveTweet(CreateTweetRequest request) {
+		try {
+			Tweet tweet = new Tweet();
+			tweet.setName(request.getName());
+			tweet.setContent(request.getContent());
+			tweetRepository.save(tweet);
+		} catch (Exception ex) {
+			logger.error("Couldn't save tweet ", ex);
+		}
+	}
+
 	public void deleteTweet(String name) {
 		tweetRepository.deleteTweetByName(name);
+	}
+	
+	public boolean isAuthorized(String authKey) {
+		try {
+			if(!Objects.equals(AutoCluckUtil.decrypt(authKey, key), authString)) {
+				return false;
+			}
+		} catch (Exception ex) {
+			logger.error("Decryption operation failed", ex);
+			return false;
+		}
+		return true;
 	}
 }
