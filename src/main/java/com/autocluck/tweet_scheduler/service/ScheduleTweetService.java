@@ -37,7 +37,7 @@ public class ScheduleTweetService {
 	
 	private List<String> publishedTweets;
 
-	@Scheduled(fixedRate = 1, timeUnit = TimeUnit.HOURS)
+	@Scheduled(fixedRate = 3, timeUnit = TimeUnit.HOURS)
 	public void tweet() {
 		try {
 			//fetch tweets from DB
