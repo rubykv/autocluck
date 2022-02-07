@@ -1,5 +1,2 @@
-key: 
-secret: 
-accesstoken: 
-tokensecret: 
-
+server:
+  port: 5000
