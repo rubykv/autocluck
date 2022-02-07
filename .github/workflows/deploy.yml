@@ -42,5 +42,6 @@ jobs:
           use_existing_version_if_available: false
           application_name: auto-cluck
           environment_name: auto-cluck-env
+          version_label: ${{github.SHA}}
           region: us-east-1
           deployment_package: tweet_scheduler-0.0.1-SNAPSHOT.jar          
