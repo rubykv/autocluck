@@ -1,5 +1,7 @@
 package com.autocluck.tweet_scheduler.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autocluck.tweet_scheduler.model.CreateTweetRequest;
+import com.autocluck.tweet_scheduler.model.Tweet;
 import com.autocluck.tweet_scheduler.model.TweetResponse;
 import com.autocluck.tweet_scheduler.service.TweetService;
 
@@ -24,9 +27,12 @@ public class TweetResource {
 	private TweetService tweetService;
 	
 	//GET
-	@GetMapping(path="/health")
-	public String healthCheck() {
-		return "All Good";
+	@GetMapping(path="/fetch/tweets")
+	public ResponseEntity<List<Tweet>> fetchAllTweet(@RequestHeader(name = "Authorization", required= true)String authKey) {
+		if(!tweetService.isAuthorized(authKey)) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		return new ResponseEntity<>(tweetService.getAllTweets(), HttpStatus.OK);
 	}
 	
 	//POST

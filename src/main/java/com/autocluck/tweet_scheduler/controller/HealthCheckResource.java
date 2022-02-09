@@ -11,5 +11,10 @@ public class HealthCheckResource {
 	public HttpStatus healthCheck(){
 		return HttpStatus.OK;
 	}
+	
+	@GetMapping(path="/api/tweet/health")
+	public String healthCheckWithMessage() {
+		return "All Good";
+	}
 
 }
