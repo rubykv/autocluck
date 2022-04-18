@@ -1,4 +1,5 @@
 # autocluck
 Autocluck is a Tweet Scheduler.
 
-Main feature of the tool is to post random tweets from the database at a scheduled time based on the configuration.
+Tool can be used to schedule tweets at a certain interval.
+Tool will randomly pick tweets stored in the Mongo DB and tweet it on behalf of the configured twitter account.
