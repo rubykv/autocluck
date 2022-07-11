@@ -62,7 +62,8 @@ public class ScheduleTweetService {
 			String tweetToPublish = selectedTweet.getContent();
 			String uniqueId = String.valueOf(System.currentTimeMillis());
 			List<Identity> identities = identityRepository.findAll();
-			twitterClient.doPost(tweetToPublish +" id: "+ uniqueId, identities.get(0));
+			System.out.print(identities.get(0));
+			//twitterClient.doPost(tweetToPublish +" id: "+ uniqueId, identities.get(0));
 		} else {
 			postTweetIfNotAlreadyPublished(tweets);
 		}
