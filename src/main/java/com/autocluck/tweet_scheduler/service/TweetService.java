@@ -1,5 +1,6 @@
 package com.autocluck.tweet_scheduler.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,6 +43,7 @@ public class TweetService {
 			Tweet tweet = new Tweet();
 			tweet.setName(request.getName());
 			tweet.setContent(request.getContent());
+			tweet.setDate(LocalDate.now());
 			tweetRepository.save(tweet);
 		} catch (Exception ex) {
 			logger.error("Couldn't save tweet ", ex);

@@ -24,48 +24,36 @@ import twitter4j.TwitterException;
 
 @Service
 public class ScheduleTweetService {
-    Logger logger = LoggerFactory.getLogger(ScheduleTweetService.class);
+	Logger logger = LoggerFactory.getLogger(ScheduleTweetService.class);
 
 	@Autowired
 	private TweetRepository tweetRepository;
-	
+
 	@Autowired
 	private IdentityRepository identityRepository;
 
 	@Autowired
 	private TwitterClient twitterClient;
-	
-	private List<String> publishedTweets;
 
 	@Scheduled(fixedRate = 3, timeUnit = TimeUnit.HOURS)
 	public void tweet() {
 		try {
-			//fetch tweets from DB
-			List<Tweet> tweets = tweetRepository.findAll();
-			
-			//First time execution OR All tweets have been published at least once, empty the temp list
-			if(CollectionUtils.isEmpty(publishedTweets) || publishedTweets.size() == tweets.size()) {
-				publishedTweets = new ArrayList<>();
-			}
-			postTweetIfNotAlreadyPublished(tweets);
+			Tweet toTweet = tweetRepository.findTopByOrderByDateDesc();
+			postTweet(toTweet);
 		} catch (Exception ex) {
 			logger.error("Couldn't update tweet ", ex);
 		}
 	}
 
-	private void postTweetIfNotAlreadyPublished(List<Tweet> tweets) throws InterruptedException, ExecutionException, IOException, TwitterException {
-		Random random = new Random();
-		Tweet selectedTweet = tweets.get(random.nextInt(tweets.size()));
-		if(!publishedTweets.contains(selectedTweet.getName())) {
-			publishedTweets.add(selectedTweet.getName());
-			//Post tweet
+	private void postTweet(Tweet selectedTweet) throws InterruptedException, ExecutionException, IOException, TwitterException {
+		if (null != selectedTweet) {
 			String tweetToPublish = selectedTweet.getContent();
-			String uniqueId = String.valueOf(System.currentTimeMillis());
+			String toDeleteByName = selectedTweet.getName();
 			List<Identity> identities = identityRepository.findAll();
-			System.out.print(identities.get(0));
-			//twitterClient.doPost(tweetToPublish +" id: "+ uniqueId, identities.get(0));
+			//twitterClient.doPost(tweetToPublish, identities.get(0));
+			//tweetRepository.deleteTweetByName(toDeleteByName);
 		} else {
-			postTweetIfNotAlreadyPublished(tweets);
+			logger.info("tweets not found in db");
 		}
 	}
 }

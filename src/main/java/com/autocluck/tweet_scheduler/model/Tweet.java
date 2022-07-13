@@ -1,5 +1,7 @@
 package com.autocluck.tweet_scheduler.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +13,7 @@ public class Tweet {
 	private String id;
 	private String content;
 	private String name;
+	private LocalDate date;
 
 	public String getId() {
 		return id;
@@ -34,6 +37,14 @@ public class Tweet {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 }
