@@ -10,6 +10,6 @@ public interface TweetRepository extends MongoRepository<Tweet, String>{
 
 	void deleteTweetByName(String name);
 	
-	Tweet findTopByOrderByDateDesc();
+	Tweet findTopByOrderByDateAsc();
 	
 }

@@ -1,6 +1,7 @@
 package com.autocluck.tweet_scheduler.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Id;
 
@@ -13,7 +14,7 @@ public class Tweet {
 	private String id;
 	private String content;
 	private String name;
-	private LocalDate date;
+	private LocalDateTime date;
 
 	public String getId() {
 		return id;
@@ -39,11 +40,11 @@ public class Tweet {
 		this.name = name;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
