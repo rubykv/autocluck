@@ -1,6 +1,5 @@
 package com.autocluck.tweet_scheduler.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Id;
