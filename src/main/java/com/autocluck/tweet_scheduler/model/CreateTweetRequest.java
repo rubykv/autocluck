@@ -1,12 +1,12 @@
 package com.autocluck.tweet_scheduler.model;
 
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public class CreateTweetRequest {
 	private String content;
-	private String link;
-	private List<String> hashTag;
 	private String name;
+	private MultipartFile img;
+	private boolean hasAttachment;
 
 	public String getContent() {
 		return content;
@@ -16,22 +16,6 @@ public class CreateTweetRequest {
 		this.content = content;
 	}
 
-	public String getLink() {
-		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-
-	public List<String> getHashTag() {
-		return hashTag;
-	}
-//set max 3
-	public void setHashTag(List<String> hashTag) {
-		this.hashTag = hashTag;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -39,4 +23,21 @@ public class CreateTweetRequest {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public MultipartFile getImg() {
+		return img;
+	}
+
+	public void setImg(MultipartFile img) {
+		this.img = img;
+	}
+
+	public boolean isHasAttachment() {
+		return hasAttachment;
+	}
+
+	public void setHasAttachment(boolean hasAttachment) {
+		this.hasAttachment = hasAttachment;
+	}
+
 }

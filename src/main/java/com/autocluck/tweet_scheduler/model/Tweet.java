@@ -14,6 +14,8 @@ public class Tweet {
 	private String content;
 	private String name;
 	private LocalDateTime date;
+	private boolean hasAttachment;
+	private String fileExtension;
 
 	public String getId() {
 		return id;
@@ -47,4 +49,19 @@ public class Tweet {
 		this.date = date;
 	}
 
+	public boolean isHasAttachment() {
+		return hasAttachment;
+	}
+
+	public void setHasAttachment(boolean hasAttachment) {
+		this.hasAttachment = hasAttachment;
+	}
+
+	public String getFileExtension() {
+		return fileExtension;
+	}
+
+	public void setFileExtension(String fileExtension) {
+		this.fileExtension = fileExtension;
+	}
 }

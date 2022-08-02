@@ -1,5 +1,7 @@
 package com.autocluck.tweet_scheduler.service;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -68,5 +70,24 @@ public class TweetService {
 	
 	public List<Tweet> getAllTweets() {
 		return tweetRepository.findAll();
+	}
+	
+	public void saveTweetWithMedia(CreateTweetRequest request) {
+		try {
+			String orgName = request.getImg().getOriginalFilename();
+			String fileExt = orgName.split("\\.")[1];
+			Path filepath = Paths.get("src/main/resources/images/", request.getName()+"."+fileExt);
+			request.getImg().transferTo(filepath);
+			
+			Tweet tweet = new Tweet();
+			tweet.setName(request.getName());
+			tweet.setContent(request.getContent());
+			tweet.setDate(LocalDateTime.now());
+			tweet.setHasAttachment(request.isHasAttachment());
+			tweet.setFileExtension(fileExt);
+			tweetRepository.save(tweet);
+		} catch (Exception ex) {
+			logger.error("Couldn't save tweet ", ex);
+		}
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.autocluck.tweet_scheduler.model.Identity;
 
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -19,6 +20,20 @@ public class TwitterClient {
     Logger logger = LoggerFactory.getLogger(TwitterClient.class);
 	
 	public void doPost(String updateStatus,Identity identity) throws InterruptedException, ExecutionException, IOException, TwitterException {
+		try {
+			Twitter twitter = new TwitterFactory().getInstance();
+			twitter.setOAuthConsumer(identity.getKey(), identity.getSecret());
+			AccessToken accessToken = new AccessToken(identity.getAccesstoken(), identity.getTokensecret());
+			twitter.setOAuthAccessToken(accessToken);
+			twitter.updateStatus(updateStatus);
+			logger.info("Successfully updated the status in Twitter.");
+		} catch (TwitterException te) {
+			logger.error("Error occurred while updating tweet " + te);
+			throw te;
+		}
+	}
+	
+	public void doPostWithMedia(StatusUpdate updateStatus,Identity identity) throws InterruptedException, ExecutionException, IOException, TwitterException {
 		try {
 			Twitter twitter = new TwitterFactory().getInstance();
 			twitter.setOAuthConsumer(identity.getKey(), identity.getSecret());
