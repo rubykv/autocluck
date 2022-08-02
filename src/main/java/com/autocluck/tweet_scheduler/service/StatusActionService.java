@@ -6,36 +6,27 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import com.autocluck.tweet_scheduler.external_client.TwitterClient;
-import com.autocluck.tweet_scheduler.model.Identity;
 import com.autocluck.tweet_scheduler.model.Tweet;
-import com.autocluck.tweet_scheduler.repository.IdentityRepository;
 import com.autocluck.tweet_scheduler.repository.TweetRepository;
 
 import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
 
 @Service
-public class ScheduleTweetService {
-	Logger logger = LoggerFactory.getLogger(ScheduleTweetService.class);
+public class StatusActionService {
+	Logger logger = LoggerFactory.getLogger(StatusActionService.class);
 
 	@Autowired
 	private TweetRepository tweetRepository;
-
-	@Autowired
-	private IdentityRepository identityRepository;
 
 	@Autowired
 	private TwitterClient twitterClient;
@@ -43,11 +34,7 @@ public class ScheduleTweetService {
 	@Autowired
 	private EmailService emailService;
 
-	@Autowired
-	ResourceLoader resourceLoader;
-
-	@Scheduled(fixedRate = 3, timeUnit = TimeUnit.HOURS)
-	public void tweet() {
+	public void updateStatus() {
 		try {
 			Tweet toTweet = tweetRepository.findTopByOrderByDateAsc();
 			postTweet(toTweet);
@@ -62,7 +49,6 @@ public class ScheduleTweetService {
 			String tweetToPublish = selectedTweet.getContent();
 			String name = selectedTweet.getName();
 			String fileExt = selectedTweet.getFileExtension();
-			List<Identity> identities = identityRepository.findAll();
 
 			File file = null;
 			String path = null;
@@ -70,7 +56,7 @@ public class ScheduleTweetService {
 				path = "src/main/resources/images/" + name + "." + fileExt;
 				file = getFile(path);
 			}
-			postTweet(tweetToPublish, identities, file);
+			postTweet(tweetToPublish, file);
 			deleteTweetAndMediaAfterPosting(name, path);
 		} else {
 			logger.info("No More Tweets To Post");
@@ -82,14 +68,13 @@ public class ScheduleTweetService {
 		}
 	}
 
-	private void postTweet(String tweetToPublish, List<Identity> identities, File file)
-			throws InterruptedException, ExecutionException, IOException, TwitterException {
+	private void postTweet(String tweetToPublish, File file) throws InterruptedException, ExecutionException, IOException, TwitterException {
 		if (null != file) {
 			StatusUpdate status = new StatusUpdate(tweetToPublish);
 			status.setMedia(file);
-			twitterClient.doPostWithMedia(status, identities.get(0));
+			twitterClient.doPostWithMedia(status);
 		} else {
-			twitterClient.doPost(tweetToPublish, identities.get(0));
+			twitterClient.doPost(tweetToPublish);
 		}
 	}
 
