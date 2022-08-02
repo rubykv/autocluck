@@ -25,6 +25,6 @@ public class ScheduleActionsService {
 	
 	@Scheduled(fixedRate = 24, timeUnit = TimeUnit.HOURS)
 	public void checkForNewFollowers() {
-		//followersActionService.thankFollowers();
+		followersActionService.thankFollowers();
 	}
 }
