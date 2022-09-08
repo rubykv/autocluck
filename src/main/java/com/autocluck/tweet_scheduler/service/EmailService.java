@@ -51,6 +51,8 @@ public class EmailService {
 		prop.put("mail.smtp.port", "465");
 		prop.put("mail.smtp.ssl.enable", "true");
 		prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
+		prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
 	}
 
 	public void sendMail() throws Exception {

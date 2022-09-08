@@ -63,7 +63,7 @@ public class StatusActionService {
 			try {
 				emailService.sendMail();
 			} catch (Exception ex) {
-				logger.error("Notification not sent");
+				logger.error("Notification not sent", ex);
 			}
 		}
 	}

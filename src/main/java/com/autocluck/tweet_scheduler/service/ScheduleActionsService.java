@@ -18,13 +18,13 @@ public class ScheduleActionsService {
 	@Autowired
 	FollowersActionService followersActionService;
 
-	@Scheduled(fixedRate = 3, timeUnit = TimeUnit.HOURS)
+	@Scheduled(fixedRate = 6, timeUnit = TimeUnit.HOURS)
 	public void tweet() {
 		statusActionService.updateStatus();
 	}
 	
-	@Scheduled(fixedRate = 24, timeUnit = TimeUnit.HOURS)
+	//@Scheduled(fixedRate = 24, timeUnit = TimeUnit.HOURS)
 	public void checkForNewFollowers() {
-		followersActionService.thankFollowers();
+	//	followersActionService.thankFollowers();
 	}
 }
