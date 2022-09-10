@@ -16,6 +16,7 @@ public class DatabaseConfig extends AbstractMongoClientConfiguration {
 	@Override
 	protected String getDatabaseName() {
 		return "autocluckdb";
+		//return "test";
 	}
 
 	@Override
@@ -25,6 +26,7 @@ public class DatabaseConfig extends AbstractMongoClientConfiguration {
 
 	@Override
 	public MongoClient mongoClient() {
+		//final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017/test");
 		final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017/autocluckdb");
 		final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
 				.applyConnectionString(connectionString).build();

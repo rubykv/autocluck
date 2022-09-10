@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autocluck.tweet_scheduler.model.CreateTweetRequest;
 import com.autocluck.tweet_scheduler.model.Tweet;
 import com.autocluck.tweet_scheduler.model.TweetResponse;
+import com.autocluck.tweet_scheduler.service.TextConverter;
 import com.autocluck.tweet_scheduler.service.TweetService;
 
 @RestController
@@ -27,6 +28,9 @@ public class TweetResource {
 	
 	@Autowired
 	private TweetService tweetService;
+	
+	@Autowired
+	private TextConverter textConverter;
 	
 	//GET
 	@GetMapping(path="/fetch/tweets")
@@ -42,6 +46,9 @@ public class TweetResource {
 	public ResponseEntity<TweetResponse> saveTweet(@RequestHeader(name = "Authorization", required= true)String authKey, @RequestBody CreateTweetRequest request){
 		if(!tweetService.isAuthorized(authKey)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		if(request.getContent().length() > 280) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		tweetService.saveTweet(request);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -64,5 +71,15 @@ public class TweetResource {
 	public ResponseEntity<Void> saveTweetWithMedia(@ModelAttribute CreateTweetRequest req) throws IllegalStateException, IOException {
 		tweetService.saveTweetWithMedia(req);
 		return new ResponseEntity<>(HttpStatus.OK);	
+	}
+	
+	// POST
+	@PostMapping(path = "/save/text", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<TweetResponse> saveTweetToConvert(@RequestHeader(name = "Authorization", required = true) String authKey, @RequestBody CreateTweetRequest request) {
+		if (!tweetService.isAuthorized(authKey)) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		textConverter.convertTextToImage(request);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
