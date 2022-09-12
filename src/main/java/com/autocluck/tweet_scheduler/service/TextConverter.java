@@ -63,12 +63,4 @@ public class TextConverter extends JPanel {
 		return bufferedImage;
 
 	}
-
-	/*
-	 * public static void main(String[] argv) { try { BufferedImage bi =
-	 * createImageWithText("Coding and writing are a lot similar - |Constantly read, read more than write, |persist data and most importantly - |Write Clearly"
-	 * ); File outputfile = new File("src/main/resources/images/save.png");
-	 * ImageIO.write(bi, "png", outputfile); } catch (Exception e) {
-	 * e.printStackTrace(); } }
-	 */
 }
